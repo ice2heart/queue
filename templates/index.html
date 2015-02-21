@@ -1,0 +1,52 @@
+<html>
+<head>
+<script type='text/javascript' src='static/js/jquery-2.1.1.min.js'></script>
+<script type='text/javascript' src='static/js/knockout-3.1.0.js'></script>
+<script src="static/js/bootstrap.min.js"></script>
+<link href="static/css/bootstrap.css" rel="stylesheet">
+<script src="static/js/main.js"></script>
+</head>
+<body>
+<h3>MPD remote</h3>
+<!--<div>
+	<h3>Tasks</h3>
+
+<form data-bind="submit: addTask">
+    Add task: <input data-bind="value: newTaskText" placeholder="What needs to be done?" />
+    <button type="submit">Add</button>
+</form>
+
+<ul data-bind="foreach: tasks, visible: tasks().length > 0">
+    <li>
+        <input type="checkbox" data-bind="checked: isDone" />
+        <input data-bind="value: title, disable: isDone" />
+        <a href="#" data-bind="click: $parent.removeTask">Delete</a>
+    </li>
+</ul>
+
+You have <b data-bind="text: incompleteTasks().length">&nbsp;</b> incomplete task(s)
+<span data-bind="visible: incompleteTasks().length == 0"> - it's beer time!</span>
+<form action="/tasks" method="post">
+    <textarea name="tasks" data-bind="value: ko.toJSON(tasks)"></textarea>
+    <button type="submit">Save</button>
+</form>
+<form>
+    <textarea data-bind="text: serverAnswer()"></textarea>
+</form>
+<button data-bind="click: save">Save</button>
+-->
+</div>
+<div>
+<h3>Status</h3>
+<h1 data-bind="text: playState"></h1>
+</div>
+<div data-bind='visible: playlist().length > 0'>
+<h3>Playlist</h3>
+<ul data-bind='foreach: playlist'>
+	<li>
+		<a href='#' data-bind='text: Name, click: $root.playTrack'></a>
+	</li>
+</ul>
+</div>
+</body>
+</html>
