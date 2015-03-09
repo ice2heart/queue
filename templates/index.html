@@ -73,16 +73,16 @@ You have <b data-bind="text: incompleteTasks().length">&nbsp;</b> incomplete tas
 			<div class='col-xs-4'>
 				<div class='input-group'>
 					<span class='input-group-addon'><span class='caret'></span></span>
-					<button type='button' class='btn btn-default dropdown-toggle form-control' placeholder='Priority' data-toggle='dropdown' data-bind='text: newPriority'></button>
+					<button type='button' class='btn btn-default dropdown-toggle form-control' placeholder='Priority' data-toggle='dropdown' data-bind='text: newPriority()["text"]'></button>
 					<ul class='dropdown-menu' data-bind='foreach: priorityType'>
-						<li><a href='#' data-bind='text: $data, value: $data, click: $root.newPriority'></a></li>
+						<li><a href='#' data-bind='text: text, value: id, click: $root.newPriority'></a></li>
 					</ul>
 				</div>
 			</div>
 			<div class='col-xs-4'>
 				<div class="input-group">
-					<input type='text' class='form-control' placeholder='Id' data-bind='value: newId' >
-					<span class='input-group-addon'>Id</span>
+					<input type='text' class='form-control' placeholder='Info' data-bind='value: newInfo' >
+					<span class='input-group-addon'>Info</span>
 				</div>
 			</div>
 		</div>
@@ -94,6 +94,47 @@ You have <b data-bind="text: incompleteTasks().length">&nbsp;</b> incomplete tas
 		</div>
 	</div>
 	<div data-bind='visible: viewMode() == modes[2]' class='col-sm-8 col-md-10'>
+		<br>
+		<div data-bind='visible: currentItem() == null'>
+			<h1>Queue clear!</h1>
+		</div>
+		<div data-bind='if: currentItem'>
+			<div class="panel panel-default" >
+				<div class='panel-body'>
+					<div class='col-md-2'>
+						<span>Name</span>
+					</div>
+					<div class='col-md-8'>
+						<span data-bind='text: currentItem().name()'></span>
+					</div>
+					<br>
+					<div class='col-md-2'>
+						<span>Date</span>
+					</div>
+					<div class='col-md-8'>
+						<span data-bind='text: currentItem().date()'></span>
+					</div>
+					<br>
+					<div class='col-md-2'>
+						<span>Priority</span>
+					</div>
+					<div class='col-md-8'>
+						<span data-bind='text: currentItem().prioriy()["text"]'></span>
+					</div>
+					<br>
+					<div class='col-md-2'>
+						<span>State</span>
+					</div>
+					<div class='col-md-8'>
+						<span data-bind='text: currentItem().state()'></span>
+					</div>
+					<hr>
+					<div class='col-md-2'>
+						<button data-bind="click: takeItem"  type='button' class='btn btn-default'>Take Item</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 </div>

@@ -33,9 +33,9 @@ function TaskListViewModel() {
 }
 */
 function BItem(data) {
-	this.id = ko.observable(data['id']);
+	this.id = ko.observable(data['_id']);
 	this.name = ko.observable(data['name']);
-	this.date = ko.observable(data['date']);
+	this.date = ko.observable( new Date(data['date']*1000));
 	this.prioriy = ko.observable(data['prioriy']);
 	this.state = ko.observable(data['state']);
 	this.text = ko.computed(function() {
@@ -44,7 +44,7 @@ function BItem(data) {
 }
 function BQueueViewModel() {
 	var self = this;
-	self.priorityType = ['low', 'hight', 'vip'];
+	self.priorityType = [{'id':3, 'text':'low'}, {'id':	2, 'text':'hight'}, {'id':1, 'text':'vip'}];
 	self.modes = ['add', 'queue', 'get'];
 	self.state = ['new', 'wait', 'work', 'done'];
 	self.viewMode = ko.observable(self.modes[1]);
@@ -62,9 +62,9 @@ function BQueueViewModel() {
 	}
 	self.newName = ko.observable();
 	self.newPriority = ko.observable(self.priorityType[0]);
-	self.newId = ko.observable();
+	self.newInfo = ko.observable();
 	self.addData = function(){
-		data = { "name":self.newName(), "prioriy":self.newPriority(), "date":(Date.now()/1000) , "id":self.newId(), 'state':self.state[0]};
+		data = { "name":self.newName(), "prioriy":self.newPriority(), "date":(Date.now()/1000) , "info":self.newInfo(), 'state':self.state[0]};
 		$.ajax('/api/add', {
 			data: ko.toJSON({'item':data}),
 			type: 'post', contentType: 'application/json',
@@ -72,10 +72,20 @@ function BQueueViewModel() {
 			error: function(result, text, errorThrow) { self.info('add ' + text + ' '  + errorThrow); }
 		});
 	}
+	self.currentItem = ko.observable();
 	self.getItem = function(){
 		$.getJSON('/api/get', function(allData) {
-			alert('id' + allData['item']['id'] + 'name' + allData['item']['name'] + allData['item']['state']);
+			console.log(typeof(allData['item']), allData['item']);
+			if (typeof(allData['item']) == 'object')
+				self.currentItem( new BItem(allData['item']));
 		});
+	}
+	self.takeItem = function(){
+		$.getJSON('/api/remove/' + self.currentItem().id(), function(data){
+			console.log(data);
+		});
+		self.currentItem(null);
+		self.viewMode(self.modes[1]);
 	}
 	self.clickId = function (id){
 		//alert(id.id());
