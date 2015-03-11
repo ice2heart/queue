@@ -39,7 +39,7 @@ function BItem(data) {
 	this.prioriy = ko.observable(data['prioriy']);
 	this.state = ko.observable(data['state']);
 	this.text = ko.computed(function() {
-		return this.date() + ':' + this.name() + ';' + this.id() + this.prioriy() + this.state();
+		return this.date() + ':' + this.name() + ':' + this.prioriy()['text'] + ':'  + this.state();
 	}, this);
 }
 function BQueueViewModel() {
