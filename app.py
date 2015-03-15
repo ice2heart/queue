@@ -7,17 +7,22 @@ from bson.objectid import ObjectId
 from pymongo import Connection
 from datetime import date, datetime
 
+def default(self, o):
+        if isinstance(o, ObjectId):
+                return str(o)
+        return json.JSONEncoder.default(self, o)
+
 app = Flask(__name__)
+connection = Connection()
+db = connection.queue
+app.json_encoder.default=default
+
 @app.route("/")
 def show_index():
 	return render_template('index.html')
 @app.route("/401")
 def show_404():
 	abort(404)
-def default(self, o):
-	if isinstance(o, ObjectId):
-		return str(o)
-	return json.JSONEncoder.default(self, o)
 @app.route('/api/queue')
 def get_queue():
 	return jsonify( { 'queue': [item for item in db.queue.find()] })
@@ -46,9 +51,6 @@ def post_remove(id):
 	else:
 		return jsonify({'result':'fail'})
 if __name__ == "__main__":
-	connection = Connection()
-	db = connection.queue
 	app.debug = True
-	app.json_encoder.default=default
 	http = WSGIServer(('', 5000), app)
 	http.serve_forever()
