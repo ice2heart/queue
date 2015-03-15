@@ -8,33 +8,6 @@
 	<meta charset="utf-8">
 </head>
 <body>
-<!--<div>
-	<h3>Tasks</h3>
-
-<form data-bind="submit: addTask">
-    Add task: <input data-bind="value: newTaskText" placeholder="What needs to be done?" />
-    <button type="submit">Add</button>
-</form>
-
-<ul data-bind="foreach: tasks, visible: tasks().length > 0">
-    <li>
-        <input type="checkbox" data-bind="checked: isDone" />
-        <input data-bind="value: title, disable: isDone" />
-        <a href="#" data-bind="click: $parent.removeTask">Delete</a>
-    </li>
-</ul>
-
-You have <b data-bind="text: incompleteTasks().length">&nbsp;</b> incomplete task(s)
-<span data-bind="visible: incompleteTasks().length == 0"> - it's beer time!</span>
-<form action="/tasks" method="post">
-    <textarea name="tasks" data-bind="value: ko.toJSON(tasks)"></textarea>
-    <button type="submit">Save</button>
-</form>
-<form>
-    <textarea data-bind="text: serverAnswer()"></textarea>
-</form>
-<button data-bind="click: save">Save</button>
-</div>-->
 
 <div class="page-header text-center">
 	<h1>Hello!</h1>
@@ -53,11 +26,30 @@ You have <b data-bind="text: incompleteTasks().length">&nbsp;</b> incomplete tas
 		<h3>Status <span data-bind='text: info'></span> Count <span data-bind='text: queueCount'></span></h3>
 		<div data-bind='visible: dbqueue().length > 0'>
 			<h3>Queue</h3>
-			<ul data-bind='foreach: dbqueue'>
+			<div class="panel-group" id="accordion" data-bind='foreach: dbqueue'>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" data-bind="attr: { href: '#prefix_' + $index()}, text: ($index() + 1) + ' ' + text() ">1. What is HTML?</a>
+						</h4>
+					</div>
+					<div data-bind="attr: { id: 'prefix_' + $index() }" class="panel-collapse collapse">
+						<div class="panel-body">
+							<div class='col-md-2'>
+								<button data-bind="click: $root.endWork"  type='button' class='btn btn-default'>End work</button>
+							</div>
+							<div class='col-md-2'>
+								<button data-bind="click: $root.deleteItem"  type='button' class='btn btn-default'>Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<ul data-bind='foreach: dbqueue'>
 				<li>
 					<a href='#' data-bind='text: text, click: $root.clickId'></a>
 				</li>
-			</ul>
+			</ul>-->
 		</div>
 	</div>
 	<div data-bind='visible: viewMode() == modes[0]' class='col-sm-12 col-md-10'>

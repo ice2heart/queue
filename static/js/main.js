@@ -1,45 +1,12 @@
-﻿/*function PItem(data) {
-	this.fileName = ko.observable(data['file']);
-    this.fileTitle = ko.observable(data['title']);
-    this.fileId = ko.observable(data['id']);
-    this.fileId = ko.observable(data['track']);
-    this.fileArtist = ko.observable(data['artist']);
-    this.Name = ko.computed(function() {
-        return  this.fileArtist() + ' - ' + this.fileTitle();
-    }, this);
-}
-
-function TaskListViewModel() {
-    // Data
-    var self = this;
-    self.playStatus = ko.observableArray([]);
-    self.playlist = ko.observableArray([]);
-    
-    self.save = function() {
-        $.ajax("/tasks", {
-            data: ko.toJSON({ tasks: self.tasks }),
-            type: "post", contentType: "application/json",
-            success: function(result) { self.serverAnswer(result) }
-        });
-    };
-
-    self.statusUpdate = function() {
-        $.getJSON('/api/status', function(allData) {
-            self.playStatus(allData);
-        });
-    }
-    //Обновлялка состояния
-    //setInterval(self.statusUpdate, 1000);
-}
-*/
-function BItem(data) {
+﻿function BItem(data) {
 	this.id = ko.observable(data['_id']);
 	this.name = ko.observable(data['name']);
 	this.date = ko.observable( new Date(data['date']*1000));
 	this.prioriy = ko.observable(data['prioriy']);
 	this.state = ko.observable(data['state']);
+	this.info = ko.observable(data['info']);
 	this.text = ko.computed(function() {
-		return this.date() + ':' + this.name() + ':' + this.prioriy()['text'] + ':'  + this.state();
+		return 'Customer: ' + this.name() + ' Info: '+ this.info() + ' Priority:' + this.prioriy()['text'] + ' Status: '  + this.state();
 	}, this);
 }
 function BQueueViewModel() {
@@ -81,15 +48,23 @@ function BQueueViewModel() {
 		});
 	}
 	self.takeItem = function(){
-		$.getJSON('/api/remove/' + self.currentItem().id(), function(data){
+		$.getJSON('/api/update/' + self.currentItem().id() + '/' + self.state[2], function(data){
 			console.log(data);
 		});
 		self.currentItem(null);
 		self.viewMode(self.modes[1]);
 	}
-	self.clickId = function (id){
-		//alert(id.id());
-		self.getItem();
+	self.deleteItem = function (item){
+		$.getJSON('/api/remove/' + item.id(), function(data){
+			console.log(data);
+		});
+		self.updateQueue();
+	}
+	self.endWork = function (item){
+		$.getJSON('/api/update/' + item.id() + '/' + self.state[3], function(data){
+			console.log(data);
+		});
+		self.updateQueue();
 	}
 	self.vieModeUpdate = ko.computed(function() {
 		if (self.viewMode() == self.modes[1]){
